@@ -1,0 +1,27 @@
+{
+  "name": "evc-api",
+  "version": "1.0.0",
+  "description": "NodeJS Package for EVC and Zaad Checkout APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmaat19/evc-api.git"
+  },
+  "keywords": [
+    "EVC-API",
+    "Zaad-API"
+  ],
+  "author": "Ahmed Ibrahim (https://github.com/ahmaat19)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ahmaat19/evc-api/issues"
+  },
+  "homepage": "https://github.com/ahmaat19/evc-api#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "uuid": "^8.3.2"
+  }
+}
