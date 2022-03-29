@@ -1,7 +1,8 @@
 const axios = require('axios')
 const { v4: uuidv4 } = require('uuid')
 
-async function EVC(props) {
+// get EVC from customer/buyer
+async function evc(props) {
   try {
     if (!props) return 'you have to provide an object props'
 
@@ -12,16 +13,29 @@ async function EVC(props) {
       client_mobile_number,
       description,
       amount,
+      merchant_no,
+      auto_withdraw,
     } = props
 
-    if (!merchant_u_id) return 'merchant_u_id is required'
-    if (!api_user_id) return 'api_user_id is required'
-    if (!api_key) return 'api_key is required'
-    if (!client_mobile_number) return 'client_mobile_number is required'
-    if (!description) return 'description is required'
-    if (!amount) return 'amount is required'
+    const responseMsg = (responseCode, responseMsg) => ({
+      responseCode,
+      responseMsg,
+    })
+
+    if (!merchant_u_id) return responseMsg(400, 'merchant_u_id is required')
+    if (!api_user_id) return responseMsg(400, 'api_user_id is required')
+    if (!api_key) return responseMsg(400, 'api_key is required')
+    if (!client_mobile_number)
+      return responseMsg(400, 'client_mobile_number is required')
+    if (!description) return responseMsg(400, 'description is required')
+    if (!amount) return responseMsg(400, 'amount is required')
     if (client_mobile_number.toString().length !== 9)
-      return 'client_mobile_number is not valid'
+      return responseMsg(400, 'client_mobile_number must be 9 digits')
+
+    if (auto_withdraw) {
+      if (merchant_no.toString().length !== 9)
+        return responseMsg(400, 'merchant_no must be 9 digits')
+    }
 
     const paymentObject = {
       schemaVersion: '1.0',
@@ -39,8 +53,35 @@ async function EVC(props) {
         },
         transactionInfo: {
           referenceId: uuidv4(),
-          invoiceId: uuidv4(),
-          amount: amount,
+          invoiceId: `${uuidv4().slice(0, 5)}-${client_mobile_number}`,
+          amount: Number(amount),
+          currency: 'USD',
+          description: description,
+        },
+      },
+    }
+
+    const netAmount = Number(amount) * 0.01
+
+    const withdrawalObject = {
+      schemaVersion: '1.0',
+      requestId: uuidv4(),
+      timestamp: Date.now(),
+      channelName: 'WEB',
+      serviceName: 'API_CREDITACCOUNT',
+      serviceParams: {
+        merchantUid: merchant_u_id,
+        apiUserId: api_user_id,
+        apiKey: api_key,
+        paymentMethod: 'MWALLET_ACCOUNT',
+        payerInfo: {
+          accountNo: merchant_no,
+          accountType: 'MERCHANT',
+        },
+        transactionInfo: {
+          referenceId: uuidv4(),
+          invoiceId: `${uuidv4().slice(0, 5)}-${merchant_no}`,
+          amount: Number(amount) - netAmount,
           currency: 'USD',
           description: description,
         },
@@ -54,14 +95,15 @@ async function EVC(props) {
 
     // 5206 => payment has been cancelled
     // 2001 => payment has been done successfully
-    if (await data) {
-      return await data
-    } else {
-      return 'Something went wrong!'
+    if (Number(data.responseCode) === 2001) {
+      if (auto_withdraw) {
+        await axios.post(`https://api.waafi.com/asm`, withdrawalObject)
+      }
     }
+    return await data
   } catch (error) {
     return error
   }
 }
 
-module.exports = EVC
+module.exports = evc

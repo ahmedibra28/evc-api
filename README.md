@@ -1,8 +1,6 @@
-# EVC & Zaad APIs
+# EVC APIs
 
 ## Usage
-
-Import the package main method:
 
 ```js
 const evc = require('evc-api')
@@ -10,11 +8,13 @@ const evc = require('evc-api')
 
 ```js
 evc({
-  merchant_u_id: 'merchant_u_id',
-  api_user_id: 'api_user_id',
-  api_key: 'api_key',
-  client_mobile_number: 'client_mobile_number',
-  description: 'description',
-  amount: 'amount',
+  merchant_u_id: 'M*******',
+  api_user_id: '1******',
+  api_key: 'API-*************',
+  client_mobile_number: '6********',
+  description: 'description.......',
+  amount: '150',
+  auto_withdrawal: true, // `true` if auto withdraw else `false`
+  merchant_no: '*********', // withdraw to ...
 }).then((data) => data)
 ```
