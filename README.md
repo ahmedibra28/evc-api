@@ -14,7 +14,7 @@ evc({
   client_mobile_number: '6********',
   description: 'description.......',
   amount: '150',
-  auto_withdrawal: true, // `true` if auto withdraw else `false`
+  auto_withdraw: true, // `true` if auto withdraw else `false`
   merchant_no: '*********', // withdraw to ...
 }).then((data) => data)
 ```
