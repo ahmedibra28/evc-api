@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmaat19/evc-api.git"
+    "url": "git+https://github.com/ahmedibradotcom/evc-api.git"
   },
   "keywords": [
     "EVC-API"
   ],
-  "author": "Ahmed Ibrahim (https://github.com/ahmaat19)",
+  "author": "Ahmed Ibrahim (https://github.com/ahmedibradotcom)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ahmaat19/evc-api/issues"
+    "url": "https://github.com/ahmedibradotcom/evc-api/issues"
   },
-  "homepage": "https://github.com/ahmaat19/evc-api#readme",
+  "homepage": "https://github.com/ahmedibradotcom/evc-api#readme",
   "dependencies": {
     "axios": "^1.4.0",
     "uuid": "^9.0.0"
